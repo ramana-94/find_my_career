@@ -1,10 +1,9 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-
-import CategoryList from '@/components/category-list';
-import { Post } from '@/types/post';
+import CategoryList from "@/components/category-list";
+import { Post } from "@/types/post";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function PostCard({
   post: { slug, title, date, cover, categories, blurUrl },
@@ -19,7 +18,7 @@ export default function PostCard({
             src={cover}
             alt="cover image"
             fill
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: "cover" }}
             placeholder="blur"
             blurDataURL={blurUrl}
           />

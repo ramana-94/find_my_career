@@ -1,10 +1,11 @@
-import { getRecordMap, mapImageUrl } from '@/libs/notion';
-import { Post } from '@/types/post';
-import { getBlurImage } from '@/utils/get-blur-image';
+import { getRecordMap, mapImageUrl } from "@/libs/notion";
+import { Post } from "@/types/post";
+import { getBlurImage } from "@/utils/get-blur-image";
 
 export async function getAllPostsFromNotion() {
   const allPosts: Post[] = [];
   const recordMap = await getRecordMap(process.env.NOTION_DATABASE_ID!);
+  console.info("========recordMap", JSON.stringify(recordMap, null, 1));
   const { block, collection } = recordMap;
   const schema = Object.values(collection)[0].value.schema;
   const propertyMap: Record<string, string> = {};
@@ -15,8 +16,8 @@ export async function getAllPostsFromNotion() {
 
   Object.keys(block).forEach((pageId) => {
     if (
-      block[pageId].value.type === 'page' &&
-      block[pageId].value.properties[propertyMap['Slug']]
+      block[pageId].value.type === "page" &&
+      block[pageId].value.properties[propertyMap["Slug"]]
     ) {
       const { properties, last_edited_time } = block[pageId].value;
 
@@ -29,12 +30,12 @@ export async function getAllPostsFromNotion() {
       const lastEditedAt = dates[0];
 
       const id = pageId;
-      const slug = properties[propertyMap['Slug']][0][0];
-      const title = properties[propertyMap['Page']][0][0];
-      const categories = properties[propertyMap['Category']][0][0].split(',');
-      const cover = properties[propertyMap['Cover']][0][1][0][1];
-      const date = properties[propertyMap['Date']][0][1][0][1]['start_date'];
-      const published = properties[propertyMap['Published']][0][0] === 'Yes';
+      const slug = properties[propertyMap["Slug"]][0][0];
+      const title = properties[propertyMap["Page"]][0][0];
+      const categories = properties[propertyMap["Category"]][0][0].split(",");
+      const cover = properties[propertyMap["Cover"]][0][1][0][1];
+      const date = properties[propertyMap["Date"]][0][1][0][1]["start_date"];
+      const published = properties[propertyMap["Published"]][0][0] === "Yes";
 
       allPosts.push({
         id,
@@ -43,7 +44,7 @@ export async function getAllPostsFromNotion() {
         categories,
         // Fix 403 error for images.
         // https://github.com/NotionX/react-notion-x/issues/211
-        cover: mapImageUrl(cover, block[pageId].value) || '',
+        cover: mapImageUrl(cover, block[pageId].value) || "",
         date,
         published,
         lastEditedAt,
